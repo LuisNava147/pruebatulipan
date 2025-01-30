@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta Interactiva</title>
+    <title>Carta de San Valentín</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #fce4ec;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -90,7 +90,7 @@
         }
 
         .yes {
-            background-color: #4CAF50;
+            background-color: #ff4081;
             color: white;
         }
 
@@ -99,11 +99,31 @@
             color: white;
         }
 
+        /* Animación de corazones */
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatUp 2s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="container" onclick="openLetter()">
+    <div class="container" onclick="closeLetter()">
         <img src="tulipan.png" alt="Tulipán" class="tulip" id="tulip">
         
         <div class="envelope">
@@ -111,20 +131,19 @@
         </div>
 
         <div class="message" id="message">
-            <p>🌸 ¡Hola! 🌸</p>
-            <p>¿Aceptas este mensaje con mucho cariño? 😊</p>
+            <p>💌 Mi amor,</p>
+            <p>¿Te gustaría ser mi San Valentín? ❤️</p>
             <div class="buttons">
-                <button class="button yes" id="yesButton" onclick="alert('¡Sabía que dirías que sí! 😊')">Sí</button>
-                <button class="button no" id="noButton" onclick="growYesButton()">No</button>
+                <button class="button yes" id="yesButton" onclick="showLoveMessage()">Sí</button>
+                <button class="button no" id="noButton" onclick="shrinkNoButton()">No</button>
             </div>
-            <br>
-            <button class="button" onclick="closeLetter()">Cerrar</button>
         </div>
     </div>
 
     <script>
         let isOpen = false;
         let yesSize = 16; // Tamaño inicial del botón "Sí"
+        let noSize = 16; // Tamaño inicial del botón "No"
 
         function openLetter() {
             if (!isOpen) {
@@ -132,25 +151,67 @@
                 document.getElementById('message').style.transform = "translate(-50%, -50%) scale(1)";
                 document.getElementById('message').style.opacity = "1";
                 document.getElementById('tulip').style.opacity = "0";
+                createHearts(); // Generar corazones
                 isOpen = true;
             }
         }
 
         function closeLetter() {
-            document.getElementById('flap').style.transform = "rotateX(0deg)";
-            document.getElementById('message').style.transform = "translate(-50%, -50%) scale(0)";
-            document.getElementById('message').style.opacity = "0";
-            document.getElementById('tulip').style.opacity = "1";
-            isOpen = false;
+            if (isOpen) {
+                document.getElementById('flap').style.transform = "rotateX(0deg)";
+                document.getElementById('message').style.transform = "translate(-50%, -50%) scale(0)";
+                document.getElementById('message').style.opacity = "0";
+                document.getElementById('tulip').style.opacity = "1";
+                isOpen = false;
+            }
         }
 
-        function growYesButton() {
+        function shrinkNoButton() {
+            let noButton = document.getElementById('noButton');
             let yesButton = document.getElementById('yesButton');
-            yesSize += 5; // Aumenta el tamaño del botón "Sí"
+
+            if (noSize > 8) {
+                noSize -= 2;
+                noButton.style.fontSize = noSize + "px";
+                noButton.style.padding = (noSize / 2) + "px " + (noSize * 1.5) + "px";
+            }
+
+            // Aumentar el tamaño del botón "Sí"
+            yesSize += 10;
             yesButton.style.fontSize = yesSize + "px";
-            yesButton.style.padding = (yesSize / 2) + "px " + (yesSize * 1.5) + "px"; // Ajusta padding proporcionalmente
+            yesButton.style.padding = (yesSize / 2) + "px " + (yesSize * 1.5) + "px";
         }
+
+        function showLoveMessage() {
+            alert("¡Sabía que diriad que siiiii, Te amoooo! ❤️😍");
+            let newWindow = window.open("", "_blank", "width=300,height=300");
+            newWindow.document.write(`
+                <style>
+                    body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #ffebee; }
+                    img { width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); }
+                </style>
+                <img src="tulipan.png" alt="Nosotros">`
+            );
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 10; i++) {
+                let heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "❤️";
+                heart.style.left = Math.random() * 100 + "px";
+                heart.style.animationDuration = Math.random() * 2 + 1 + "s";
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+            }
+        }
+
+        document.querySelector(".container").addEventListener("click", openLetter);
     </script>
 
 </body>
 </html>
+
