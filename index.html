@@ -86,7 +86,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, font-size 0.3s ease;
         }
 
         .yes {
@@ -105,7 +105,7 @@
 <body>
 
     <div class="container" onclick="openLetter()">
-        <img src="tulipan.png" alt="Tulipán" class="tulip" id="tulip">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Tulip_-_floriade_canberra.jpg/120px-Tulip_-_floriade_canberra.jpg" alt="Tulipán" class="tulip" id="tulip">
         
         <div class="envelope">
             <div class="flap" id="flap"></div>
@@ -115,7 +115,7 @@
             <p>🌸 ¡Hola! 🌸</p>
             <p>¿Aceptas este mensaje con mucho cariño? 😊</p>
             <div class="buttons">
-                <button class="button yes" onclick="alert('¡Sabía que dirías que sí! 😊')">Sí</button>
+                <button class="button yes" id="yesButton" onclick="alert('¡Sabía que dirías que sí! 😊')">Sí</button>
                 <button class="button no" id="noButton" onmouseover="moveNoButton()">No</button>
             </div>
             <br>
@@ -125,6 +125,7 @@
 
     <script>
         let isOpen = false;
+        let yesButtonSize = 16; // Tamaño inicial del texto del botón "Sí"
 
         function openLetter() {
             if (!isOpen) {
@@ -149,10 +150,16 @@
             let x = Math.random() * 80 - 40; // Movimiento aleatorio
             let y = Math.random() * 80 - 40;
             button.style.transform = `translate(${x}px, ${y}px)`;
+
+            // Agrandar el botón "Sí"
+            let yesButton = document.getElementById('yesButton');
+            yesButtonSize += 3; // Aumenta el tamaño del texto cada vez
+            yesButton.style.fontSize = `${yesButtonSize}px`;
+            yesButton.style.padding = `${yesButtonSize / 3}px ${yesButtonSize}px`;
         }
     </script>
 
 </body>
 </html>
 
-
+ 
