@@ -97,7 +97,6 @@
         .no {
             background-color: #d63447;
             color: white;
-            position: relative;
         }
 
     </style>
@@ -105,7 +104,7 @@
 <body>
 
     <div class="container" onclick="openLetter()">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Tulip_-_floriade_canberra.jpg/120px-Tulip_-_floriade_canberra.jpg" alt="Tulipán" class="tulip" id="tulip">
+        <img src="tulipan.png" alt="Tulipán" class="tulip" id="tulip">
         
         <div class="envelope">
             <div class="flap" id="flap"></div>
@@ -116,7 +115,7 @@
             <p>¿Aceptas este mensaje con mucho cariño? 😊</p>
             <div class="buttons">
                 <button class="button yes" id="yesButton" onclick="alert('¡Sabía que dirías que sí! 😊')">Sí</button>
-                <button class="button no" id="noButton" onmouseover="moveNoButton()">No</button>
+                <button class="button no" id="noButton" onclick="growYesButton()">No</button>
             </div>
             <br>
             <button class="button" onclick="closeLetter()">Cerrar</button>
@@ -125,7 +124,7 @@
 
     <script>
         let isOpen = false;
-        let yesButtonSize = 16; // Tamaño inicial del texto del botón "Sí"
+        let yesSize = 16; // Tamaño inicial del botón "Sí"
 
         function openLetter() {
             if (!isOpen) {
@@ -145,21 +144,13 @@
             isOpen = false;
         }
 
-        function moveNoButton() {
-            let button = document.getElementById('noButton');
-            let x = Math.random() * 80 - 40; // Movimiento aleatorio
-            let y = Math.random() * 80 - 40;
-            button.style.transform = `translate(${x}px, ${y}px)`;
-
-            // Agrandar el botón "Sí"
+        function growYesButton() {
             let yesButton = document.getElementById('yesButton');
-            yesButtonSize += 3; // Aumenta el tamaño del texto cada vez
-            yesButton.style.fontSize = `${yesButtonSize}px`;
-            yesButton.style.padding = `${yesButtonSize / 3}px ${yesButtonSize}px`;
+            yesSize += 5; // Aumenta el tamaño del botón "Sí"
+            yesButton.style.fontSize = yesSize + "px";
+            yesButton.style.padding = (yesSize / 2) + "px " + (yesSize * 1.5) + "px"; // Ajusta padding proporcionalmente
         }
     </script>
 
 </body>
 </html>
-
- 
