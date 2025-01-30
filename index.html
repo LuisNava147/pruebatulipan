@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Interactiva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 250px;
+            height: 200px;
+            cursor: pointer;
+        }
+
+        .tulip {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #d63447;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 125px solid transparent;
+            border-right: 125px solid transparent;
+            border-bottom: 100px solid #b52b3b;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            height: 90%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .yes {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .no {
+            background-color: #d63447;
+            color: white;
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" onclick="openLetter()">
+        <img src="tulipan.png" alt="Tulipán" class="tulip" id="tulip">
+        
+        <div class="envelope">
+            <div class="flap" id="flap"></div>
+        </div>
+
+        <div class="message" id="message">
+            <p>🌸 ¡Hola! 🌸</p>
+            <p>¿Aceptas este mensaje con mucho cariño? 😊</p>
+            <div class="buttons">
+                <button class="button yes" onclick="alert('¡Sabía que dirías que sí! 😊')">Sí</button>
+                <button class="button no" id="noButton" onmouseover="moveNoButton()">No</button>
+            </div>
+            <br>
+            <button class="button" onclick="closeLetter()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        let isOpen = false;
+
+        function openLetter() {
+            if (!isOpen) {
+                document.getElementById('flap').style.transform = "rotateX(180deg)";
+                document.getElementById('message').style.transform = "translate(-50%, -50%) scale(1)";
+                document.getElementById('message').style.opacity = "1";
+                document.getElementById('tulip').style.opacity = "0";
+                isOpen = true;
+            }
+        }
+
+        function closeLetter() {
+            document.getElementById('flap').style.transform = "rotateX(0deg)";
+            document.getElementById('message').style.transform = "translate(-50%, -50%) scale(0)";
+            document.getElementById('message').style.opacity = "0";
+            document.getElementById('tulip').style.opacity = "1";
+            isOpen = false;
+        }
+
+        function moveNoButton() {
+            let button = document.getElementById('noButton');
+            let x = Math.random() * 80 - 40; // Movimiento aleatorio
+            let y = Math.random() * 80 - 40;
+            button.style.transform = `translate(${x}px, ${y}px)`;
+        }
+    </script>
+
+</body>
+</html>
+
+
