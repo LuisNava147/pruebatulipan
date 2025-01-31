@@ -16,6 +16,46 @@
             overflow: hidden;
         }
 
+        /* Modal de inicio */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+            backdrop-filter: blur(5px); /* Efecto de difuminado */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content p {
+            font-size: 24px;
+            color: #d63447;
+            margin: 0;
+        }
+
+        .modal-content button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4081;
+            color: white;
+            cursor: pointer;
+        }
+
         .container {
             position: relative;
             width: 250px; /* Ancho del sobre */
@@ -101,9 +141,9 @@
         }
 
         /* Animación de corazones */
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
         .hearts {
@@ -120,11 +160,51 @@
             position: absolute;
             font-size: 24px;
             color: #ff4081;
-            animation: float 5s ease-in infinite;
+            animation: floatUp 3s ease-in infinite; /* Duración reducida */
+        }
+
+        /* Mensaje de "Sí" */
+        .love-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none; /* Oculto inicialmente */
+        }
+
+        .love-message p {
+            font-size: 24px;
+            color: #d63447;
+            margin: 0;
+        }
+
+        .love-message button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4081;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <!-- Modal de inicio -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <p>Para Merab Luévanos ❤️</p>
+            <button onclick="closeModal()">Abrir carta</button>
+        </div>
+    </div>
+
     <div class="container" onclick="openLetter()">
         <div class="envelope" id="envelope">
             <div class="flap" id="flap"></div>
@@ -141,10 +221,23 @@
         </div>
     </div>
 
+    <!-- Mensaje de "Sí" -->
+    <div class="love-message" id="loveMessage">
+        <p>Sabía que dirías que sí, ¡te amoooo! ❤️</p>
+        <button onclick="openImageWindow()">Da clic aquí</button>
+    </div>
+
     <!-- Contenedor de corazones -->
     <div class="hearts" id="hearts"></div>
 
     <script>
+        // Mostrar el modal al cargar la página
+        document.getElementById('modal').style.display = 'flex';
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
         let isOpen = false;
         let yesSize = 16;
         let noSize = 16;
@@ -204,14 +297,33 @@
         }
 
         function showLoveMessage() {
-            alert("¡Te amoooo! ❤️😍");
-            let newWindow = window.open("", "_blank", "width=300,height=300");
+            // Ocultar la carta y mostrar el mensaje de "Sí"
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('loveMessage').style.display = 'block';
+        }
+
+        function openImageWindow() {
+            // Abrir una ventana emergente con una imagen
+            let newWindow = window.open("", "_blank", "width=800,height=600");
             newWindow.document.write(
                 `<style>
-                    body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #ffebee; }
-                    img { width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); }
+                    body { 
+                        margin: 0; 
+                        padding: 0; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        height: 100vh; 
+                        background-color: #ffebee; 
+                        overflow: hidden; 
+                    }
+                    img { 
+                        width: 100%; 
+                        height: 100%; 
+                        object-fit: cover; /* Ajusta la imagen sin cortarla */
+                    }
                 </style>
-                <img src="URL_DE_TU_FOTO" alt="Nosotros">`
+                <img src="Mamor.jpg" alt="Nosotros">`
             );
         }
 
@@ -219,19 +331,27 @@
             const heartsContainer = document.getElementById('hearts');
             heartsContainer.innerHTML = ''; // Limpiar corazones anteriores
 
-            for (let i = 0; i < 20; i++) {
+            const envelope = document.getElementById('envelope');
+            const envelopeRect = envelope.getBoundingClientRect();
+
+            for (let i = 0; i < 100; i++) { // Aumentamos a 100 corazones
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
                 heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+
+                // Posición inicial desde el sobre
+                heart.style.left = Math.random() * 100 + 'vw'; // Distribución horizontal en toda la pantalla
+                heart.style.top = envelopeRect.bottom + 'px'; // Comienzan desde la parte inferior del sobre
+                heart.style.opacity = 0.5; // Opacidad inicial del 50%
+                heart.style.animationDuration = Math.random() * 2 + 1 + 's'; // Duración aleatoria
+
                 heartsContainer.appendChild(heart);
             }
 
             // Eliminar corazones después de la animación
             setTimeout(() => {
                 heartsContainer.innerHTML = '';
-            }, 5000);
+            }, 3000); // Duración reducida
         }
     </script>
 </body>
